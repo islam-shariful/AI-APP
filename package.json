@@ -20,5 +20,8 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "openai": "^5.16.0"
+  }
 }
