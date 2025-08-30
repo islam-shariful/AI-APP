@@ -20,10 +20,10 @@ app.get('/api/hello', (req: Request, res: Response) => {
    res.json({ message: 'Hello from the API!' });
 });
 
-let lastResponseId: string | null = null;
+const conversations = new Map<string, string>();
 
 app.post('/api/chat', express.json(), async (req: Request, res: Response) => {
-   const { prompt } = req.body;
+   const { prompt, conversationId } = req.body;
    if (!prompt) {
       return res.status(400).json({ error: 'Prompt is required' });
    }
@@ -34,11 +34,10 @@ app.post('/api/chat', express.json(), async (req: Request, res: Response) => {
          input: prompt,
          temperature: 0.2,
          max_output_tokens: 100,
-         previous_response_id: lastResponseId || undefined,
+         previous_response_id: conversations.get(conversationId),
       });
 
-      lastResponseId = response.id;
-
+      conversations.set(conversationId, response.id);
       res.json({ message: response.output_text });
    } catch (error) {
       console.error('Error generating text:', error);
