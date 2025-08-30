@@ -20,6 +20,8 @@ app.get('/api/hello', (req: Request, res: Response) => {
    res.json({ message: 'Hello from the API!' });
 });
 
+let lastResponseId: string | null = null;
+
 app.post('/api/chat', express.json(), async (req: Request, res: Response) => {
    const { prompt } = req.body;
    if (!prompt) {
@@ -32,7 +34,10 @@ app.post('/api/chat', express.json(), async (req: Request, res: Response) => {
          input: prompt,
          temperature: 0.2,
          max_output_tokens: 100,
+         previous_response_id: lastResponseId || undefined,
       });
+
+      lastResponseId = response.id;
 
       res.json({ message: response.output_text });
    } catch (error) {
