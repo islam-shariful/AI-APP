@@ -3,7 +3,7 @@
 Configure environment:
 
 ```bash
-cp .env.example .env
+cp packages/server/.env.example packages/server/.env
 ```
 
 To install dependencies:
